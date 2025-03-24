@@ -1,0 +1,6 @@
+# ninja log v6
+2	260	7629920399710091	build.ninja	1583337b1fc6ac75
+16	96	7627263637272084	CMakeFiles/untitled.dir/main.cpp.obj	b39b6fc6ceec2419
+94	189	7627285908814816	untitled.exe	88f5ea6130bf954e
+8	79	7627285907968972	CMakeFiles/untitled.dir/Ex1.cpp.obj	6102bc9554ed88b5
+3	78	7627297108263491	CMakeFiles/untitled.dir/Ex2.cpp.obj	7842244e015f3e1c

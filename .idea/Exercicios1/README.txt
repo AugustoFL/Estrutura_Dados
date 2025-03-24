@@ -1,0 +1,1 @@
+Olá professora, como eu e meu irmão só temos um notebook, e temos que dividir, estamos fazendo em conjunto

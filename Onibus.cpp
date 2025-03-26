@@ -1,20 +1,39 @@
 //
 // Created by Afonso & Augusto on 24/03/2025.
-//
 
-#include <clocale>
 #include <cstdio>
+#include <locale.h>
+#include <thread>
 
+/**
+ * Criando a estrutura para a pessoa
+ */
+typedef struct {
+
+  char nome[50];
+  char cpf[11];
+
+
+} Pessoa;
+
+/**
+ * Criando a estrutura para a data
+ */
 typedef struct {
 
   int dia, mes, ano, hora_prevista;
 
   } Data;
 
-
+/**
+ * Criando enums para o tipo de passagem e locais
+ */
 typedef enum tipoPassagem{ normal, meia, especial };
 typedef enum locais { Assis, São_Paulo, Bauru, Marília, São_Pedro_do_Turvo, Osasco };
 
+/**
+ * Criando a estrutura para o destino
+ */
 typedef struct {
 
   locais loc_origem;
@@ -22,14 +41,18 @@ typedef struct {
 
 } Destino;
 
+/**
+ * Criando a estrutura para a passagem, um total de todas as outras estruturas e enums
+ */
 typedef struct {
 
   double valor_total;
   int quantidade;
   Data data;
   int assento;
-  tipoPassagem tipo;
+  char tipo;
   Destino destino;
+  Pessoa pessoa;
 
   } Passagem;
 
@@ -39,21 +62,38 @@ typedef struct {
 setlocale(LC_ALL, "Portuguese");
 
 Passagem pass;
+tipoPassagem tipo;
 
-  printf("Bem vindo ao programa de compra e venda de passagens.");
+int opc = 0;
+
+    printf("Bem vindo ao programa de compra e venda de passagens.\n");
+    printf("Qual o seu nome?");
+    fgets(pass.pessoa.nome, sizeof(pass.pessoa.nome), stdin);
+    printf("Digite seu CPF:  ");
+    fgets(pass.pessoa.cpf, sizeof(pass.pessoa.cpf), stdin);
+
     printf("Qual tipo de passagem?\n" );
-    printf("----------------------------------------\n");
+    printf("-------------------------------------------\n");
     printf("| Tipo            | Código | Desconto(%%) |\n");
-    printf("----------------------------------------\n");
-    printf("| Normal          |  101   | ---------  |\n");
-    printf("----------------------------------------\n" );
-    printf("| Meia(estudante) |  102   | 50%%       |\n" );
-    printf("----------------------------------------\n" );
-    printf("| Especial        |  103   | 100%%      |\n" );
-    printf("| (idosos e PcD)  |        |            |\n");
-    printf("----------------------------------------\n" );
+    printf("-------------------------------------------\n");
+    printf("| Normal          |   1    | -----------  |\n");
+    printf("------------------------------------------\n" );
+    printf("| Meia(estudante) |   2    |  50%%         |\n" );
+    printf("------------------------------------------\n" );
+    printf("| Especial        |   3    |  100%%       |\n" );
+    printf("| (idosos e PcD)  |        |              |\n");
+    printf("------------------------------------------\n" );
     printf("Digite o codigo: ");
-    scanf("%d", &pass.tipo);
+    scanf("%d", &opc);
+    switch (opc) {
+      case 1: pass.tipo = normal; break;
+      case 2: pass.tipo = meia; break;
+      case 3: pass.tipo = especial; break;
+      default:
+        printf("Código inválido!\n");
+      return 1;
+    }
+
 
 
   /*
@@ -77,27 +117,27 @@ Passagem pass;
     scanf("%d", &pass.destino.loc_origem);
                                           */
 
-    printf("Digite o local de destino:");
-    printf("-----------------------------------\n");
+    printf("Digite o local de destino:\n");
+    printf("----------------------------------------------\n");
     printf("|      Destinos      | Valor (R$)  |  Codigo |\n");
     printf("----------------------------------------------\n");
-    printf("|       Assis        | 27,20       |    1     \n");
-    printf("---------------------------------------------\n" );
-    printf("|     Sao Paulo      | 88,30       |    2    \n" );
-    printf("---------------------------------------------\n" );
-    printf("|       Bauru        | 30,50       |    3    \n" );
-    printf("---------------------------------------------\n" );
-    printf("|      Marilia       | 25,00       |    4    \n" );
-    printf("---------------------------------------------\n" );
-    printf("| Sao Pedro do Turvo | 13,50       |    5    \n" );
-    printf("---------------------------------------------\n" );
-    printf("|       Osasco       | 75,10       |    6    \n" );
-    printf("---------------------------------------------\n" );
+    printf("|       Assis        | 27,20       |    1    |\n");
+    printf("---------------------------------------------|\n" );
+    printf("|     Sao Paulo      | 88,30       |    2    |\n" );
+    printf("---------------------------------------------|\n" );
+    printf("|       Bauru        | 30,50       |    3    |\n" );
+    printf("---------------------------------------------|\n" );
+    printf("|      Marilia       | 25,00       |    4    |\n" );
+    printf("---------------------------------------------|\n" );
+    printf("| Sao Pedro do Turvo | 13,50       |    5    |\n" );
+    printf("---------------------------------------------|\n" );
+    printf("|       Osasco       | 75,10       |    6    |\n" );
+    printf("---------------------------------------------|\n" );
     printf("Digite o código: ");
     int opcDesti;
     scanf("%d", &opcDesti );
-    pass.destino.loc_destino[opcDesti+1] = pass.destino.loc_destino;
-    printf("Quantas passagens quer comprar?");
+    pass.destino.loc_destino = (locais)(opcDesti - 1);
+    printf("Quantas passagens quer comprar?: ");
     scanf("%d", &pass.quantidade);
 switch (pass.destino.loc_destino) {
   case Assis:
@@ -107,7 +147,7 @@ switch (pass.destino.loc_destino) {
     pass.valor_total = 88.30 * pass.quantidade;
   break;
   case Bauru:
-    pass.valor_total = 30.25 * pass.quantidade;
+    pass.valor_total = 30.50 * pass.quantidade;
   break;
   case Marília:
     pass.valor_total = 25 * pass.quantidade;
@@ -124,14 +164,57 @@ switch (pass.destino.loc_destino) {
   break;
 }
 
-    printf("Digite o dia da viagem");
+    printf("Digite o dia da viagem: ");
     scanf("%d", &pass.data.dia);
-    printf("Digite o mes da viagem");
+    printf("Digite o mes da viagem: ");
     scanf("%d", &pass.data.mes);
-    printf("Digite o ano da viagem");
+    printf("Digite o ano da viagem: ");
     scanf("%d", &pass.data.ano);
 
+    printf("Escolha o seu assento. ( 1 - 60): ");
+    scanf("%d", &pass.assento);
 
+    if (pass.assento < 1 || pass.assento > 60) {
+      printf("Número de assento inválido!\n");
+      return 1;
+    }
+
+/*
+    printf("\nResumo da Compra:\n");
+    printf("Nome: %s\n", pass.pessoa.nome);
+    printf("CPF: %s\n", pass.pessoa.cpf);
+    printf("Tipo de passagem: %s\n", (pass.tipo == normal) ? "Normal" : (pass.tipo == meia) ? "Meia" : "Especial");
+    printf("Destino: %d\n", pass.destino.loc_destino + 1);
+    printf("Quantidade: %d\n", pass.quantidade);
+    printf("Valor total: R$%.2f\n", pass.valor_total);
+    printf("Data: %02d/%02d/%04d\n", pass.data.dia, pass.data.mes, pass.data.ano);
+    printf("Assento: %d\n", pass.assento);
+*/
+    using namespace std::this_thread;
+    using namespace std::chrono;
+    printf("Imprimindo...");
+    printf("\n****************************************\n");
+    sleep_for(seconds(2));
+    printf("*         BILHETE DE PASSAGEM          *\n");
+    sleep_for(seconds(1));
+    printf("****************************************\n");
+    sleep_for(seconds(1));
+    printf("* Nome: %-30s *\n", pass.pessoa.nome);
+    sleep_for(seconds(1));
+    printf("* CPF: %-31s \n", pass.pessoa.cpf);
+    sleep_for(seconds(1));
+    printf("* Tipo de passagem: %-19s*\n", (pass.tipo == normal) ? "Normal" : (pass.tipo == meia) ? "Meia" : "Especial");
+    sleep_for(seconds(1));
+    printf("* Destino: %-28d*\n", pass.destino.loc_destino + 1);
+    sleep_for(seconds(1));
+    printf("* Quantidade: %-25d*\n", pass.quantidade);
+    sleep_for(seconds(1));
+    printf("* Data: %02d/%02d/%04d %-20s*\n", pass.data.dia, pass.data.mes, pass.data.ano, "");
+    sleep_for(seconds(1));
+    printf("* Assento: %-28d*\n", pass.assento);
+    sleep_for(seconds(1));
+    printf("****************************************\n");
+    sleep_for(seconds(1));
 
 
     return 0;

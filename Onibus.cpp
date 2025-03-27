@@ -3,7 +3,9 @@
 
 #include <cstdio>
 #include <locale.h>
+#include <string.h>
 #include <thread>
+#include <string>
 
 /**
  * Criando a estrutura para a pessoa
@@ -65,12 +67,19 @@ Passagem pass;
 tipoPassagem tipo;
 
 int opc = 0;
+double desconto = 0;
 
     printf("Bem vindo ao programa de compra e venda de passagens.\n");
     printf("Qual o seu nome?");
     fgets(pass.pessoa.nome, sizeof(pass.pessoa.nome), stdin);
+    pass.pessoa.nome[strcspn(pass.pessoa.nome, "\n")] = '\0';
     printf("Digite seu CPF:  ");
     fgets(pass.pessoa.cpf, sizeof(pass.pessoa.cpf), stdin);
+    pass.pessoa.cpf[strcspn(pass.pessoa.cpf, "\n")] = '\0';
+    if (strlen(pass.pessoa.cpf) != 11) {
+      printf("CPF inválido!\n");
+      return 1;
+    }
 
     printf("Qual tipo de passagem?\n" );
     printf("-------------------------------------------\n");
@@ -86,9 +95,9 @@ int opc = 0;
     printf("Digite o codigo: ");
     scanf("%d", &opc);
     switch (opc) {
-      case 1: pass.tipo = normal; break;
-      case 2: pass.tipo = meia; break;
-      case 3: pass.tipo = especial; break;
+      case 1: pass.tipo = normal; desconto = 1; break;
+      case 2: pass.tipo = meia; desconto = 0.5; break;
+      case 3: pass.tipo = especial; desconto = 0; break;
       default:
         printf("Código inválido!\n");
       return 1;
@@ -141,22 +150,22 @@ int opc = 0;
     scanf("%d", &pass.quantidade);
 switch (pass.destino.loc_destino) {
   case Assis:
-    pass.valor_total = 27.20 * pass.quantidade;
+    pass.valor_total = 27.20 * pass.quantidade * desconto;
   break;
   case São_Paulo:
-    pass.valor_total = 88.30 * pass.quantidade;
+    pass.valor_total = 88.30 * pass.quantidade * desconto;
   break;
   case Bauru:
-    pass.valor_total = 30.50 * pass.quantidade;
+    pass.valor_total = 30.50 * pass.quantidade * desconto;
   break;
   case Marília:
-    pass.valor_total = 25 * pass.quantidade;
+    pass.valor_total = 25 * pass.quantidade * desconto;
   break;
   case São_Pedro_do_Turvo:
-    pass.valor_total = 13.50 * pass.quantidade;
+    pass.valor_total = 13.50 * pass.quantidade * desconto;
   break;
   case Osasco:
-    pass.valor_total = 75.10 * pass.quantidade;
+    pass.valor_total = 75.10 * pass.quantidade * desconto;
   break;
   default:
     pass.valor_total = 0;
@@ -166,10 +175,22 @@ switch (pass.destino.loc_destino) {
 
     printf("Digite o dia da viagem: ");
     scanf("%d", &pass.data.dia);
+if (pass.data.dia < 1 || pass.data.dia > 31) {
+    printf("Dia invalido.");
+    return 1;
+}
     printf("Digite o mes da viagem: ");
     scanf("%d", &pass.data.mes);
+if (pass.data.mes < 1 || pass.data.mes > 12) {
+      printf("Mes invalido.");
+      return 1;
+}
     printf("Digite o ano da viagem: ");
     scanf("%d", &pass.data.ano);
+if (pass.data.ano < 2025) {
+  printf("Ano invalido.");
+  return 1;
+}
 
     printf("Escolha o seu assento. ( 1 - 60): ");
     scanf("%d", &pass.assento);
@@ -199,7 +220,7 @@ switch (pass.destino.loc_destino) {
     sleep_for(seconds(1));
     printf("****************************************\n");
     sleep_for(seconds(1));
-    printf("* Nome: %-30s *\n", pass.pessoa.nome);
+    printf("* Nome: %-47s *\n", pass.pessoa.nome);
     sleep_for(seconds(1));
     printf("* CPF: %-31s \n", pass.pessoa.cpf);
     sleep_for(seconds(1));

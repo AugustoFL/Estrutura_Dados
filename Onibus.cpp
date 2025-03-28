@@ -76,10 +76,13 @@ double desconto = 0;
     printf("Digite seu CPF:  ");
     fgets(pass.pessoa.cpf, sizeof(pass.pessoa.cpf), stdin);
     pass.pessoa.cpf[strcspn(pass.pessoa.cpf, "\n")] = '\0';
-    if (strlen(pass.pessoa.cpf) != 11) {
+    /*
+     *if (strlen(pass.pessoa.cpf) < 10 || strlen(pass.pessoa.cpf) > 10) {
       printf("CPF inválido!\n");
-      return 1;
+      return 0;
     }
+    DANDO ERRO E INTERFERENCIA, NÃO DEU PARA ARRUMAR A TEMPO
+    */
 
     printf("Qual tipo de passagem?\n" );
     printf("-------------------------------------------\n");
